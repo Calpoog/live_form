@@ -10,12 +10,16 @@ class MyFormCubit extends FormCubit {
   // Define final fields which are all the controls the form can have
   // Type safety is maintained!
   final username = TextFormControl(
-    initialValue: '',
     validators: [requiredString],
   );
   final password = TextFormControl(
-    initialValue: 'a',
     validators: [requiredString, minLengthString(5)],
+  );
+  late final confirmPassword = TextFormControl(
+    validators: [
+      requiredString,
+      (value) => value != password.value ? 'Passwords must match' : null
+    ],
   );
   final radio = RadioFormControl<bool?>(
     initialValue: null,
@@ -28,7 +32,7 @@ class MyFormCubit extends FormCubit {
     validators: [requiredField],
   );
 
-  // Define a list of all fields defined above. This should not change over the life of the cubit.
+  // Define a list of all fields defined above.
   @override
   List<FormControl> get controls => [username, password, radio, age, fruit];
 
@@ -40,6 +44,7 @@ class MyFormCubit extends FormCubit {
   List<FormControl> get validatedControls => [
         username,
         password,
+        confirmPassword,
         radio,
         // Use collection ifs to optionally validate particular fields depending on others
         if (radio.value == true) age,
@@ -117,6 +122,11 @@ class MyApp extends StatelessWidget {
                     LiveTextFormField(
                       control: form.password,
                       decoration: const InputDecoration(labelText: 'Password'),
+                    ),
+                    LiveTextFormField(
+                      control: form.confirmPassword,
+                      decoration:
+                          const InputDecoration(labelText: 'Confirm password'),
                     ),
                     LiveRadioGroupFormField(
                       control: form.radio,
