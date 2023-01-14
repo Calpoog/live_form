@@ -2,7 +2,11 @@ import 'focusable_form_control.dart';
 
 /// A bloc representing an integer-value text input.
 class NumberFormControl extends FocusableFormControl<int?> {
-  NumberFormControl({super.initialValue, super.validators});
+  NumberFormControl({
+    super.initialValue,
+    super.validators,
+    super.dependent,
+  });
 
   @override
   String toString() {

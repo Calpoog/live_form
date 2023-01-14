@@ -16,6 +16,7 @@ class MyFormCubit extends FormCubit {
     validators: [requiredString, minLengthString(5)],
   );
   late final confirmPassword = TextFormControl(
+    dependent: [password],
     validators: [
       requiredString,
       (value) => value != password.value ? 'Passwords must match' : null

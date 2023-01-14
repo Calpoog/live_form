@@ -4,7 +4,11 @@ import 'form_control.dart';
 ///
 /// It is marked as `touched` and `dirty` on any user interaction.
 class NonFocusableFormControl<T> extends FormControl<T> {
-  NonFocusableFormControl({required super.initialValue, super.validators});
+  NonFocusableFormControl({
+    required super.initialValue,
+    super.validators,
+    super.dependent,
+  });
 
   @override
   void update(T value) {

@@ -108,6 +108,8 @@ class FormControlState<T> {
         pure == o.pure &&
         touched == o.touched &&
         focused == o.focused &&
+        error == o.error &&
+        valid == o.valid &&
         submitted == o.submitted;
   }
 

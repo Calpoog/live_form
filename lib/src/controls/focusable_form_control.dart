@@ -5,7 +5,11 @@ import 'form_control.dart';
 /// Marked `dirty` when a user changes its value
 /// Marked `touched` when a user has focused and then unfocused (blur) the control.
 class FocusableFormControl<T> extends FormControl<T> {
-  FocusableFormControl({required super.initialValue, super.validators});
+  FocusableFormControl({
+    required super.initialValue,
+    super.validators,
+    super.dependent,
+  });
 
   @override
   void update(T value) {

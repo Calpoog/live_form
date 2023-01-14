@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../validators.dart';
@@ -6,8 +8,19 @@ part 'form_control_state.dart';
 
 /// The base bloc containing states representing a form control.
 abstract class FormControl<T> extends Cubit<FormControlState<T>> {
-  FormControl({required T initialValue, Iterable<Validator<T>>? validators})
-      : super(FormControlState(value: initialValue, validators: validators));
+  final List<FormControl> _dependent;
+  late final List<StreamSubscription> _listeners;
+
+  FormControl({
+    required T initialValue,
+    List<Validator<T>>? validators,
+    List<FormControl>? dependent,
+  })  : _dependent = dependent ?? [],
+        super(FormControlState(value: initialValue, validators: validators)) {
+    _listeners = _dependent
+        .map((control) => control.stream.listen(_dependentListener))
+        .toList();
+  }
 
   /// Updates the value of the control's state.
   void update(T value);
@@ -15,7 +28,7 @@ abstract class FormControl<T> extends Cubit<FormControlState<T>> {
   /// Marks this control state as dirty.
   void markDirty();
 
-  /// Marks this control state has having been touched.
+  /// Marks this control state as having been touched.
   void markTouched();
 
   /// Called when the control changes focus
@@ -34,6 +47,11 @@ abstract class FormControl<T> extends Cubit<FormControlState<T>> {
         validators: state.validators,
       ),
     );
+  }
+
+  void _dependentListener(FormControlState _) {
+    // validity gets recaculated on construction
+    emit(state.copyWith());
   }
 
   @override
@@ -72,4 +90,13 @@ abstract class FormControl<T> extends Cubit<FormControlState<T>> {
 
   /// Whether this control has been submitted.
   bool get submitted => state.submitted;
+
+  @override
+  Future<void> close() {
+    for (var listener in _listeners) {
+      listener.cancel();
+    }
+
+    return super.close();
+  }
 }
