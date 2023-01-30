@@ -40,7 +40,7 @@ abstract class FormCubit extends Cubit<FormCubitState> {
         .toList();
 
     emit(state.copyWith(
-      valid: validatedControls.every((control) => control.valid),
+      valid: _valid,
       controls: validatedControls,
     ));
   }
@@ -58,13 +58,16 @@ abstract class FormCubit extends Cubit<FormCubitState> {
     return super.close();
   }
 
+  bool get _valid => validatedControls.every((control) => control.valid);
+
   // Called when a control changes state in the form.
   void _controlUpdated(FormControlState controlState) {
     // Submission states never change validity because it does not update value
-    if (controlState is FormControlSubmissionState) return;
+    if (controlState is FormControlSubmissionState ||
+        controlState is FormControlResetState) return;
 
     emit(state.copyWith(
-      valid: validatedControls.every((control) => control.valid),
+      valid: _valid,
       controls: validatedControls,
     ));
   }
@@ -92,6 +95,13 @@ abstract class FormCubit extends Cubit<FormCubitState> {
     emit(!hasError ? state._toSuccess() : state._toFailure());
 
     return !hasError;
+  }
+
+  /// Resets the state of all controls in the form
+  void reset() {
+    for (final control in controls) {
+      control.reset();
+    }
   }
 
   /// Marks the first invalid control in the form as needing scrolled into view.

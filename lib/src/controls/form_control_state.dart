@@ -136,3 +136,18 @@ class FormControlSubmissionState<T> extends FormControlState<T> {
     super.submitted = false,
   });
 }
+
+// A state which is the direct result of a call to reset()
+// so it can be ignored by the parent form's listener
+class FormControlResetState<T> extends FormControlState<T> {
+  FormControlResetState({
+    required super.value,
+    super.validators,
+  }) : super(
+          pure: true,
+          touched: false,
+          focused: false,
+          isFirstError: false,
+          submitted: false,
+        );
+}

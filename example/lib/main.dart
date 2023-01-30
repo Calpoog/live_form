@@ -35,7 +35,8 @@ class MyFormCubit extends FormCubit {
 
   // Define a list of all fields defined above.
   @override
-  List<FormControl> get controls => [username, password, radio, age, fruit];
+  List<FormControl> get controls =>
+      [username, password, confirmPassword, radio, age, fruit];
 
   // Optionally define a list of controls which are currently being validated. This *can* change
   // over the life of the cubit to deal with conditional fields. The ConditionalFormField widget
@@ -165,6 +166,10 @@ class MyApp extends StatelessWidget {
                     ElevatedButton(
                       onPressed: form.submit,
                       child: const Text('submit'),
+                    ),
+                    ElevatedButton(
+                      onPressed: form.reset,
+                      child: const Text('reset'),
                     ),
                   ]
                       .expand((e) sync* {

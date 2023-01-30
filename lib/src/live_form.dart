@@ -14,7 +14,9 @@ class LiveForm {
       ErrorBehavior.onTouched.predicate;
 
   bool shouldShowError(FormControlState control) {
-    return control.invalid && _errorBehavior.call(control);
+    final result = _errorBehavior.call(control);
+
+    return result && control.invalid;
   }
 
   void setErrorBehavior(ErrorBehavior behavior) {

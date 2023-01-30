@@ -10,12 +10,14 @@ part 'form_control_state.dart';
 abstract class FormControl<T> extends Cubit<FormControlState<T>> {
   final List<FormControl> _dependent;
   late final List<StreamSubscription> _listeners;
+  final T _initialValue;
 
   FormControl({
     required T initialValue,
     List<Validator<T>>? validators,
     List<FormControl>? dependent,
   })  : _dependent = dependent ?? [],
+        _initialValue = initialValue,
         super(FormControlState(value: initialValue, validators: validators)) {
     _listeners = _dependent
         .map((control) => control.stream.listen(_dependentListener))
@@ -47,6 +49,18 @@ abstract class FormControl<T> extends Cubit<FormControlState<T>> {
         validators: state.validators,
       ),
     );
+  }
+
+  /// Resets the control to its initial value and state.
+  ///
+  /// State is pure
+  /// Initial value is set again and validity based upon it
+  /// Not submitted, touched, or focused
+  void reset() {
+    emit(FormControlResetState(
+      value: _initialValue,
+      validators: state.validators,
+    ));
   }
 
   void _dependentListener(FormControlState _) {

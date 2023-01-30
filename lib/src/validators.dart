@@ -1,4 +1,5 @@
 typedef Validator<T> = String? Function(T value);
+typedef AsyncValidator<T> = Future<String?> Function(T value);
 
 /// Returns an error message for empty strings
 String? requiredString(String value) => value.isEmpty ? 'Required' : null;

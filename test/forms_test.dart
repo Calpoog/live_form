@@ -208,6 +208,60 @@ void main() {
       expect(control.touched, true);
       expect(control.submitted, true);
     });
+
+    test('can be reset', () {
+      final validators = <Validator<int>>[requiredField];
+      final control = FocusableFormControl(
+        initialValue: 2,
+        validators: validators,
+      )
+        ..update(10)
+        ..markTouched()
+        ..submit();
+
+      expect(control.value, 10);
+      expect(control.pure, false);
+      expect(control.touched, true);
+      expect(control.submitted, true);
+
+      control.reset();
+
+      expect(control.value, 2);
+      expect(control.pure, true);
+      expect(control.touched, false);
+      expect(control.submitted, false);
+      expect(control.state.validators, validators);
+    });
+
+    late FormControl dependent;
+    blocTest(
+      'can depend on another control',
+      setUp: () => dependent = FocusableFormControl(initialValue: 0),
+      build: () {
+        return FocusableFormControl(
+          initialValue: 9999,
+          dependent: [dependent],
+          validators: [(value) => dependent.value == 1 ? 'invalid' : null],
+        );
+      },
+      act: (bloc) async {
+        // starts valid
+        // should stay valid, but still emits because bloc always emits on the first try even if it equals initial
+        dependent.update(2);
+        await Future.delayed(const Duration(seconds: 0));
+        // should go invalid
+        dependent.update(1);
+        await Future.delayed(const Duration(seconds: 0));
+        // should go valid again
+        dependent.update(2);
+        await Future.delayed(const Duration(seconds: 0));
+      },
+      expect: () => [
+        predicate((state) => (state as FormControlState).valid),
+        predicate((state) => (state as FormControlState).invalid),
+        predicate((state) => (state as FormControlState).valid),
+      ],
+    );
   });
 
   group('NonFocusableFormControl', () {
@@ -528,6 +582,26 @@ void main() {
       () {
         final form = SimpleFormCubit();
         expect(form.validatedControls, form.controls);
+      },
+    );
+
+    blocTest(
+      'can be reset',
+      build: () => TestFormCubit(),
+      act: (bloc) async {
+        bloc.textControl.update('123456');
+        bloc.radioControl.update(1);
+        bloc.conditionalControl.update('test');
+        await Future.delayed(Duration.zero);
+        bloc.reset();
+      },
+      verify: (bloc) {
+        expect(bloc.textControl.pure, true);
+        expect(bloc.textControl.value, '');
+        expect(bloc.radioControl.pure, true);
+        expect(bloc.radioControl.value, null);
+        expect(bloc.conditionalControl.pure, true);
+        expect(bloc.conditionalControl.value, '');
       },
     );
   });

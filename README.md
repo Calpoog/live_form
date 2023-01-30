@@ -290,7 +290,7 @@ The following `ErrorBehavior`s are available (all require the control to be `inv
 
 Notice how in each case, once an error has appeared for the first time, they are real-time afterwards. This is always the best user experience as it allows them to see once they've corrected their mistake. The different behaviors essentially offer different levels of intrusiveness as the user makes modifications.
 
-If for some reason the above behaviors don't work for your application, you an customize the behavior with your own function. The function gets a reference to a control's state and returns a boolean which determines whether or not to show the error. You do not need to check `state.invalid` as this is always a prerequisite for an error to be shown.
+If for some reason the above behaviors don't work for your application, you can customize the behavior with your own function. The function gets a reference to a control's state and returns a boolean which determines whether or not to show the error. You do not need to check `state.invalid` as this is always a prerequisite for an error to be shown.
 
 ```dart
 LifeFormConfig().setCustomErrorBehavior((FormControlState state) {
