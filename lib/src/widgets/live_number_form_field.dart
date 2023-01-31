@@ -34,7 +34,6 @@ class LiveNumberFormField extends LiveFormField<int?, NumberFormControl> {
     super.expands,
     super.maxLength,
     super.maxLengthEnforcement,
-    super.onChanged,
     super.onEditingComplete,
     super.onSubmitted,
     super.onAppPrivateCommand,

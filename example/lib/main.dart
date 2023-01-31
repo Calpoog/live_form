@@ -29,6 +29,7 @@ class MyFormCubit extends FormCubit {
   final fruit = SelectionFormControl<String>(
     initialValue: 'Banana',
   );
+  final toggle = ToggleFormControl();
   final age = NumberFormControl(
     validators: [requiredField],
   );
@@ -36,7 +37,7 @@ class MyFormCubit extends FormCubit {
   // Define a list of all fields defined above.
   @override
   List<FormControl> get controls =>
-      [username, password, confirmPassword, radio, age, fruit];
+      [username, password, confirmPassword, radio, age, fruit, toggle];
 
   // Optionally define a list of controls which are currently being validated. This *can* change
   // over the life of the cubit to deal with conditional fields. The ConditionalFormField widget
@@ -51,6 +52,7 @@ class MyFormCubit extends FormCubit {
         // Use collection ifs to optionally validate particular fields depending on others
         if (radio.value == true) age,
         fruit,
+        toggle,
       ];
 
   // It may be useful to turn your form into JSON or some other model for use with APIs
@@ -61,6 +63,7 @@ class MyFormCubit extends FormCubit {
       'radio': radio.value,
       'age': age.value,
       'fruit': fruit.value,
+      'toggle': toggle.value,
     };
   }
 }
@@ -145,6 +148,7 @@ class MyApp extends StatelessWidget {
                         decoration: const InputDecoration(labelText: 'Age'),
                       ),
                     ),
+                    LiveSwitchFormField(control: form.toggle),
                     LiveDropdownButtonFormField(
                       control: form.fruit,
                       items: const [

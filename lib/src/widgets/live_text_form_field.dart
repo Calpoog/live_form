@@ -32,7 +32,6 @@ class LiveTextFormField extends LiveFormField<String, TextFormControl> {
     super.expands,
     super.maxLength,
     super.maxLengthEnforcement,
-    super.onChanged,
     super.onEditingComplete,
     super.onSubmitted,
     super.onAppPrivateCommand,

@@ -45,14 +45,12 @@ class LiveRadio<T> {
 class LiveRadioGroupFormField<T> extends StatelessWidget {
   final RadioFormControl<T> control;
   final List<LiveRadio<T>> items;
-  final void Function(T?)? onChanged;
   final bool toggleable;
 
   const LiveRadioGroupFormField({
     super.key,
     required this.control,
     required this.items,
-    this.onChanged,
     this.toggleable = false,
   }) : assert(null is T || toggleable == false,
             'If a radio group is toggleable it must use a nullable type T');

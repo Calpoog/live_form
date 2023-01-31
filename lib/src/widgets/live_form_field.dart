@@ -48,7 +48,6 @@ class LiveFormField<T, C extends FormControl<T>> extends StatefulWidget {
   static const int noMaxLength = -1;
   final int? maxLength;
   final MaxLengthEnforcement? maxLengthEnforcement;
-  final ValueChanged<String>? onChanged;
   final VoidCallback? onEditingComplete;
   final ValueChanged<String>? onSubmitted;
   final AppPrivateCommandCallback? onAppPrivateCommand;
@@ -108,7 +107,6 @@ class LiveFormField<T, C extends FormControl<T>> extends StatefulWidget {
     this.expands = false,
     this.maxLength,
     this.maxLengthEnforcement,
-    this.onChanged,
     this.onEditingComplete,
     this.onSubmitted,
     this.onAppPrivateCommand,
