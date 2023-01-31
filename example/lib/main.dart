@@ -150,7 +150,7 @@ class MyApp extends StatelessWidget {
                         decoration: const InputDecoration(labelText: 'Age'),
                       ),
                     ),
-                    LiveSwitchFormField(control: form.toggle),
+                    LiveCheckboxFormField(control: form.toggle),
                     LiveError(control: form.toggle),
                     LiveDropdownButtonFormField(
                       control: form.fruit,
