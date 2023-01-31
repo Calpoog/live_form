@@ -29,7 +29,9 @@ class MyFormCubit extends FormCubit {
   final fruit = SelectionFormControl<String>(
     initialValue: 'Banana',
   );
-  final toggle = ToggleFormControl();
+  final toggle = ToggleFormControl(
+    validators: [(value) => value ? 'No :)' : null],
+  );
   final age = NumberFormControl(
     validators: [requiredField],
   );
@@ -149,6 +151,7 @@ class MyApp extends StatelessWidget {
                       ),
                     ),
                     LiveSwitchFormField(control: form.toggle),
+                    LiveError(control: form.toggle),
                     LiveDropdownButtonFormField(
                       control: form.fruit,
                       items: const [
